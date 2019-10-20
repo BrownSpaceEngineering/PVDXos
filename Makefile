@@ -19,21 +19,32 @@ ASF_DIR := asf-samd21
 # but make sure to add ./
 ATMEL_SRC_DIRS :=  \
 ./ \
+hpl/adc \
+hpl/tc \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/GCC/ARM_CM0 \
 hpl/systick \
 hpl/dmac \
 hal/src \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/MemMang \
 samd21a/gcc \
 hpl/pm \
 hpl/sysctrl \
 hal/utils/src \
+hpl/sercom \
 examples \
 hpl/gclk \
 samd21a/gcc/gcc \
+hpl/wdt \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0 \
+hpl/nvmctrl \
 hpl/core
 
 # Add these based on DIR_INCLUDES in $(ASF_DIR)/gcc/Makefile,
-# by copying it here and replacing '-I"../' with '' (nothing),
-# making sure to include ./
+# by copying the lines after that variable here and performing the following:
+# 1) Replace '-I"../' with '' (nothing)
+# 2) Replace the trailing '"' characters by replacing '" \' with ' \'. 
+# 3) Make sure to include ./ by adding './ \'
 # Alternatively, derive this based on ATMEL_SRC_DIRS above
 # if DIR_INCLUDES doesn't exist
 ATMEL_INCLUDE_DIRS := \
@@ -41,17 +52,27 @@ ATMEL_INCLUDE_DIRS := \
 config \
 examples \
 hal/include \
-hal/utils/include  \
-hpl/core  \
-hpl/dmac  \
-hpl/gclk  \
-hpl/pm  \
-hpl/port  \
-hpl/sysctrl  \
-hpl/systick  \
-hri  \
-CMSIS/Include  \
-samd21a/include  \
+hal/utils/include \
+hpl/adc \
+hpl/core \
+hpl/dmac \
+hpl/gclk \
+hpl/nvmctrl \
+hpl/pm \
+hpl/port \
+hpl/sercom \
+hpl/sysctrl \
+hpl/systick \
+hpl/tc \
+hpl/wdt \
+hri \
+thirdparty/RTOS \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0 \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/include \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/GCC/ARM_CM0 \
+thirdparty/RTOS/freertos/FreeRTOSV10.0.0/module_config \
+CMSIS/Core/Include \
+samd21a/include
 
 # Top-level directories make should look for things in
 vpath %.c src/ $(ASF_DIR)/
@@ -59,8 +80,7 @@ vpath %.s src/ $(ASF_DIR)/
 vpath %.S src/ $(ASF_DIR)/
 
 ############# Misc configuration #############
-# CHANGE ME
-OUTPUT_FILES_PREFIX := build/bse-fsw-template
+OUTPUT_FILES_PREFIX := build/pvdxos
 OBJ_DIR := obj
 GCC_ARGS := -x c -mthumb -DDEBUG -O0 -ffunction-sections -mlong-calls -g3 -Wall -c -std=gnu99
 

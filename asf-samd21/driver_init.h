@@ -21,9 +21,61 @@ extern "C" {
 #include <hal_io.h>
 #include <hal_sleep.h>
 
+#include <hal_adc_sync.h>
+
+#include <hal_flash.h>
+
+#include <hal_i2c_m_sync.h>
+#include <hal_spi_m_sync.h>
+
+#include <hal_usart_sync.h>
+
 #include <hal_delay.h>
+#include <hal_pwm.h>
+#include <hpl_tc_base.h>
+
+#include <hal_wdt.h>
+
+extern struct adc_sync_descriptor ADC_0;
+
+extern struct flash_descriptor FLASH_0;
+
+extern struct i2c_m_sync_desc       I2C_0;
+extern struct spi_m_sync_descriptor SPI_0;
+
+extern struct usart_sync_descriptor USART_0;
+
+extern struct pwm_descriptor PWM_0;
+
+extern struct wdt_descriptor WDT_0;
+
+void ADC_0_PORT_init(void);
+void ADC_0_CLOCK_init(void);
+void ADC_0_init(void);
+
+void FLASH_0_init(void);
+void FLASH_0_CLOCK_init(void);
+
+void I2C_0_CLOCK_init(void);
+void I2C_0_init(void);
+void I2C_0_PORT_init(void);
+
+void SPI_0_PORT_init(void);
+void SPI_0_CLOCK_init(void);
+void SPI_0_init(void);
+
+void USART_0_PORT_init(void);
+void USART_0_CLOCK_init(void);
+void USART_0_init(void);
 
 void delay_driver_init(void);
+
+void PWM_0_PORT_init(void);
+void PWM_0_CLOCK_init(void);
+void PWM_0_init(void);
+
+void WDT_0_CLOCK_init(void);
+void WDT_0_init(void);
 
 /**
  * \brief Perform system initialization, initialize pins and clocks for

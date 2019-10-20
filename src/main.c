@@ -6,6 +6,7 @@ int main(void)
 	atmel_start_init();
 
 	/* Replace the code below with your application code */
+	FREERTOS_V1000_0_example();
 
 	/* Set pin PB30 to output */
 	REG_PORT_DIR1 |= (1<<30);

@@ -4,7 +4,7 @@
  *
  * \brief Generic DMAC related functionality.
  *
- * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2016-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -103,6 +103,7 @@ int32_t _dma_init(void)
 
 		hri_dmac_write_CHCTRLB_reg(DMAC, _cfgs[i].ctrlb);
 		hri_dmacdescriptor_write_BTCTRL_reg(&_descriptor_section[i], _cfgs[i].btctrl);
+		hri_dmacdescriptor_write_DESCADDR_reg(&_descriptor_section[i], 0x0);
 	}
 
 	NVIC_DisableIRQ(DMAC_IRQn);
@@ -208,15 +209,19 @@ int32_t _dma_dstinc_enable(const uint8_t channel, const bool enable)
  */
 static inline void _dmac_handler(void)
 {
-	uint8_t               channel      = hri_dmac_read_INTPEND_ID_bf(DMAC);
+	uint8_t               channel         = hri_dmac_read_INTPEND_ID_bf(DMAC);
+	uint8_t               current_channel = hri_dmac_read_CHID_reg(DMAC);
+	uint8_t               flag_status;
 	struct _dma_resource *tmp_resource = &_resources[channel];
 
 	hri_dmac_write_CHID_reg(DMAC, channel);
+	flag_status = hri_dmac_get_CHINTFLAG_reg(DMAC, DMAC_CHINTFLAG_MASK);
+	hri_dmac_write_CHID_reg(DMAC, current_channel);
 
-	if (hri_dmac_get_CHINTFLAG_TERR_bit(DMAC)) {
+	if (flag_status & DMAC_CHINTFLAG_TERR) {
 		hri_dmac_clear_CHINTFLAG_TERR_bit(DMAC);
 		tmp_resource->dma_cb.error(tmp_resource);
-	} else if (hri_dmac_get_CHINTFLAG_TCMPL_bit(DMAC)) {
+	} else if (flag_status & DMAC_CHINTFLAG_TCMPL) {
 		hri_dmac_clear_CHINTFLAG_TCMPL_bit(DMAC);
 		tmp_resource->dma_cb.transfer_done(tmp_resource);
 	}

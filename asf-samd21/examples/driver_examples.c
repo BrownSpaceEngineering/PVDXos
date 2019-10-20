@@ -10,7 +10,104 @@
 #include "driver_init.h"
 #include "utils.h"
 
+/**
+ * Example of using ADC_0 to generate waveform.
+ */
+void ADC_0_example(void)
+{
+	uint8_t buffer[2];
+
+	adc_sync_enable_channel(&ADC_0, 0);
+
+	while (1) {
+		adc_sync_read_channel(&ADC_0, 0, buffer, 2);
+	}
+}
+
+static uint8_t src_data[128];
+static uint8_t chk_data[128];
+/**
+ * Example of using FLASH_0 to read and write Flash main array.
+ */
+void FLASH_0_example(void)
+{
+	uint32_t page_size;
+	uint16_t i;
+
+	/* Init source data */
+	page_size = flash_get_page_size(&FLASH_0);
+
+	for (i = 0; i < page_size; i++) {
+		src_data[i] = i;
+	}
+
+	/* Write data to flash */
+	flash_write(&FLASH_0, 0x3200, src_data, page_size);
+
+	/* Read data from flash */
+	flash_read(&FLASH_0, 0x3200, chk_data, page_size);
+}
+
+void I2C_0_example(void)
+{
+	struct io_descriptor *I2C_0_io;
+
+	i2c_m_sync_get_io_descriptor(&I2C_0, &I2C_0_io);
+	i2c_m_sync_enable(&I2C_0);
+	i2c_m_sync_set_slaveaddr(&I2C_0, 0x12, I2C_M_SEVEN);
+	io_write(I2C_0_io, (uint8_t *)"Hello World!", 12);
+}
+
+/**
+ * Example of using SPI_0 to write "Hello World" using the IO abstraction.
+ */
+static uint8_t example_SPI_0[12] = "Hello World!";
+
+void SPI_0_example(void)
+{
+	struct io_descriptor *io;
+	spi_m_sync_get_io_descriptor(&SPI_0, &io);
+
+	spi_m_sync_enable(&SPI_0);
+	io_write(io, example_SPI_0, 12);
+}
+
+/**
+ * Example of using USART_0 to write "Hello World" using the IO abstraction.
+ */
+void USART_0_example(void)
+{
+	struct io_descriptor *io;
+	usart_sync_get_io_descriptor(&USART_0, &io);
+	usart_sync_enable(&USART_0);
+
+	io_write(io, (uint8_t *)"Hello World!", 12);
+}
+
 void delay_example(void)
 {
 	delay_ms(5000);
+}
+
+/**
+ * Example of using PWM_0.
+ */
+void PWM_0_example(void)
+{
+	pwm_set_parameters(&PWM_0, 10000, 5000);
+	pwm_enable(&PWM_0);
+}
+
+/**
+ * Example of using WDT_0.
+ */
+void WDT_0_example(void)
+{
+	uint32_t clk_rate;
+	uint16_t timeout_period;
+
+	clk_rate       = 1000;
+	timeout_period = 4096;
+	wdt_set_timeout_period(&WDT_0, clk_rate, timeout_period);
+	wdt_enable(&WDT_0);
 }
