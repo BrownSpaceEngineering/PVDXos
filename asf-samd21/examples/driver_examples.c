@@ -11,77 +11,110 @@
 #include "utils.h"
 
 /**
- * Example of using ADC_0 to generate waveform.
+ * Example task of using ADC_0.
  */
-void ADC_0_example(void)
+void ADC_0_example_convert_task(void *p)
 {
-	uint8_t buffer[2];
+	(void)p;
 
-	adc_sync_enable_channel(&ADC_0, 0);
+	adc_os_enable_channel(&ADC_0, 0);
 
 	while (1) {
-		adc_sync_read_channel(&ADC_0, 0, buffer, 2);
+		adc_os_start_conversion(&ADC_0);
+		os_sleep(10);
 	}
 }
 
-static uint8_t src_data[128];
-static uint8_t chk_data[128];
-/**
- * Example of using FLASH_0 to read and write Flash main array.
- */
-void FLASH_0_example(void)
+void ADC_0_example_read_task(void *p)
 {
-	uint32_t page_size;
-	uint16_t i;
+	uint8_t adc_values[8];
+	uint8_t num = 0;
 
-	/* Init source data */
-	page_size = flash_get_page_size(&FLASH_0);
+	(void)p;
 
-	for (i = 0; i < page_size; i++) {
-		src_data[i] = i;
+	while (1) {
+		num = adc_os_read_channel(&ADC_0, 0, adc_values, 8);
+		if (num == 8) {
+			/* read OK, handle data. */;
+		} else {
+			/* error. */;
+		}
 	}
-
-	/* Write data to flash */
-	flash_write(&FLASH_0, 0x3200, src_data, page_size);
-
-	/* Read data from flash */
-	flash_read(&FLASH_0, 0x3200, chk_data, page_size);
-}
-
-void I2C_0_example(void)
-{
-	struct io_descriptor *I2C_0_io;
-
-	i2c_m_sync_get_io_descriptor(&I2C_0, &I2C_0_io);
-	i2c_m_sync_enable(&I2C_0);
-	i2c_m_sync_set_slaveaddr(&I2C_0, 0x12, I2C_M_SEVEN);
-	io_write(I2C_0_io, (uint8_t *)"Hello World!", 12);
 }
 
 /**
- * Example of using SPI_0 to write "Hello World" using the IO abstraction.
+ * Example task of using I2C_0 to echo using the IO abstraction.
+ * Assume the I2C device is AT30TSE temp sensor on IO1 Xplained Pro connected to
+ * XPlained board EXT1.
  */
-static uint8_t example_SPI_0[12] = "Hello World!";
-
-void SPI_0_example(void)
+void I2C_0_example_task(void *p)
 {
 	struct io_descriptor *io;
-	spi_m_sync_get_io_descriptor(&SPI_0, &io);
+	uint16_t              data;
+	uint8_t               buf[2];
 
-	spi_m_sync_enable(&SPI_0);
-	io_write(io, example_SPI_0, 12);
+	(void)p;
+
+	i2c_m_os_get_io(&I2C_0, &io);
+
+	/* Address of the temp sensor. */
+	i2c_m_os_set_slaveaddr(&I2C_0, 0x4f, 0);
+
+	/* Set configuration to use 12-bit temperature */
+	buf[0] = 1;
+	buf[1] = 3 << 5;
+	io_write(&I2C_0.io, buf, 2);
+	/* Set to temperature register. */
+	buf[0] = 0;
+	io_write(&I2C_0.io, buf, 1);
+
+	for (;;) {
+		if (io->read(io, (uint8_t *)&data, 2) == 2) {
+			/* read OK, handle data. */;
+		} else {
+			/* error. */;
+		}
+	}
 }
 
 /**
- * Example of using USART_0 to write "Hello World" using the IO abstraction.
+ * Example task of using SPI_0 to echo using the IO abstraction.
  */
-void USART_0_example(void)
+void SPI_0_example_task(void *p)
 {
 	struct io_descriptor *io;
-	usart_sync_get_io_descriptor(&USART_0, &io);
-	usart_sync_enable(&USART_0);
+	uint16_t              data;
 
-	io_write(io, (uint8_t *)"Hello World!", 12);
+	(void)p;
+
+	spi_m_os_get_io_descriptor(&SPI_0, &io);
+
+	for (;;) {
+		if (io->read(io, (uint8_t *)&data, 2) == 2) {
+			/* read OK, handle data. */;
+		} else {
+			/* error. */;
+		}
+	}
+}
+
+/**
+ * Example task of using USART_0 to echo using the IO abstraction.
+ */
+void USART_0_example_task(void *p)
+{
+	struct io_descriptor *io;
+	uint16_t              data;
+
+	(void)p;
+
+	usart_os_get_io(&USART_0, &io);
+
+	for (;;) {
+		if (io->read(io, (uint8_t *)&data, 1) == 1) {
+			io->write(io, (uint8_t *)&data, 1);
+		}
+	}
 }
 
 void delay_example(void)

@@ -256,16 +256,16 @@
 // <GCLK_CLKCTRL_GEN_GCLK7_Val"> Generic clock generator 7
 
 // <i> Select the clock source for TC.
-#ifndef CONF_GCLK_TC3_SRC
-#define CONF_GCLK_TC3_SRC GCLK_CLKCTRL_GEN_GCLK0_Val
+#ifndef CONF_GCLK_TC7_SRC
+#define CONF_GCLK_TC7_SRC GCLK_CLKCTRL_GEN_GCLK0_Val
 #endif
 
 /**
- * \def CONF_GCLK_TC3_FREQUENCY
- * \brief TC3's Clock frequency
+ * \def CONF_GCLK_TC7_FREQUENCY
+ * \brief TC7's Clock frequency
  */
-#ifndef CONF_GCLK_TC3_FREQUENCY
-#define CONF_GCLK_TC3_FREQUENCY 1000000
+#ifndef CONF_GCLK_TC7_FREQUENCY
+#define CONF_GCLK_TC7_FREQUENCY 1000000
 #endif
 
 // <y> WDT Clock Source

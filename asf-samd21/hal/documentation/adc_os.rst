@@ -1,6 +1,6 @@
-======================
-ADC Synchronous driver
-======================
+===============
+ADC RTOS driver
+===============
 
 An ADC (Analog-to-Digital Converter) converts analog signals to digital values.
 A reference signal with a known voltage level is quantified into equally
@@ -10,13 +10,17 @@ measured by the ADC is compared against these chunks and the chunk with the
 closest voltage level defines the digital value that can be used to represent
 the analog input voltage level.
 
+The convert functions of ADC RTOS driver are optimized for RTOS support.
+That is, the convert functions will not work without RTOS, the convert
+functions should only be called in a RTOS task or thread.
+
 Usually an ADC can operate in either differential or single-ended mode.
 In differential mode two signals (V+ and V-) are compared against each other
 and the resulting digital value represents the relative voltage level between
 V+ and V-. This means that if the input voltage level on V+ is lower than on
 V- the digital value is negative, which also means that in differential
 mode one bit is lost to the sign. In single-ended mode only V+ is compared
-against the reference voltage, and the resulting digital value can only be
+against the reference voltage, and the resulting digital value only can be
 positive, but the full bit-range of the ADC can be used.
 
 Usually multiple resolutions are supported by the ADC, lower resolution can
@@ -43,12 +47,41 @@ application, in free running mode it continues to make conversion from it
 is triggered until it is stopped by the application. When window monitoring,
 the ADC should be set to free running mode.
 
+The ADC async driver use a channel map buffer to map the relation between the
+enabled channels number and the index of register channel descriptor. The index
+of channel map buffer is channel number, and the value of channel map buffer is
+the index of register channel descriptor. For example, when register channel_1,
+channel_5, and channel_9 in sequence, the value of channel_map[1] is 0, the value
+of channel_map[5] is 1, the value of channel_map[9] is 2.
+The ADC OS driver use a ring buffer to store ADC sample data. When the ADC
+raise the sample complete interrupt, a copy of the ADC sample register is stored
+in the ring buffer at the next free location. This will happen regardless of if
+the ADC is in one shot mode or in free running mode. When the ring buffer is
+full, the next sample will overwrite the oldest sample in the ring buffer. The
+size of the ring buffer is set by a macro in atmel_start.h called ADC_BUFFER_SIZE.
+
+To read the samples from the ring buffer, the function adc_os_read_channel is used.
+This function reads the number of bytes asked for from the ring buffer, starting
+from the oldest byte. If the number of bytes asked for are more than currently
+available in the ring buffer or more than ringbuf size, the task/thread will be
+blocked until read done.If the number of bytes asked for is less than the available bytes
+in the ring buffer, the remaining bytes will be kept until a new call.
+The adc_os_read function will return the  number of bytes that want to read from
+the buffer back to the caller.
+
+During data convert, the ADC convert process is not protected, so that a more
+flexible way can be chosen in application if multi task/thread access.
+
+Note that the adc_async_read_channel function will always read bytes from the ring buffer,
+and for samples > 8-bit the read length has to be power of two number.
+
 Features
 --------
 * Initialization and de-initialization
-* Support multiple Conversion Mode, Single or Free run
-* Start ADC Conversion
-* Read Conversion Result
+* Single shot or free running conversion modes
+* Start ADC conversion
+* Error and monitor events
+* Ring buffer
 
 Applications
 ------------
@@ -58,7 +91,8 @@ Applications
 
 Dependencies
 ------------
-* ADC hardware
+* ADC hardware with result ready/conversion done, error and monitor interrupt.
+* RTOS
 
 Concurrency
 -----------

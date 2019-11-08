@@ -2,6 +2,7 @@
 build/
 obj/
 .vscode
+asf-samd21/main.c
 
 # Prerequisites
 *.d

@@ -122,7 +122,7 @@ static struct tc_configuration _tcs[] = {
 #endif
 };
 
-static struct _pwm_device *_tc3_dev = NULL;
+static struct _pwm_device *_tc7_dev = NULL;
 
 static int8_t         get_tc_index(const void *const hw);
 static uint8_t        tc_get_hardware_index(const void *const hw);
@@ -305,9 +305,9 @@ static void tc_pwm_interrupt_handler(struct _pwm_device *device)
 /**
  * \brief TC interrupt handler
  */
-void TC3_Handler(void)
+void TC7_Handler(void)
 {
-	tc_pwm_interrupt_handler(_tc3_dev);
+	tc_pwm_interrupt_handler(_tc7_dev);
 }
 
 /**
@@ -351,8 +351,8 @@ static int8_t get_tc_index(const void *const hw)
  */
 static void _tc_init_irq_param(const void *const hw, void *dev)
 {
-	if (hw == TC3) {
-		_tc3_dev = (struct _pwm_device *)dev;
+	if (hw == TC7) {
+		_tc7_dev = (struct _pwm_device *)dev;
 	}
 }
 

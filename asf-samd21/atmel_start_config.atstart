@@ -62,9 +62,9 @@ middlewares:
 drivers:
   ADC_0:
     user_label: ADC_0
-    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::ADC::driver_config_definition::ADC::HAL:Driver:ADC.Sync
+    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::ADC::driver_config_definition::ADC::HAL:Driver:ADC.RTOS.Beta
     functionality: ADC
-    api: HAL:Driver:ADC_Sync
+    api: HAL:Driver:ADC_RTOS_Beta
     configuration:
       adc_advanced_settings: false
       adc_arch_adjres: 0
@@ -95,7 +95,28 @@ drivers:
       adc_prescaler: Peripheral clock divided by 4
       adc_reference: 1.0V voltage reference
       adc_resolution: 12-bit
-    optional_signals: []
+    optional_signals:
+    - identifier: ADC_0:AIN/0
+      pad: PA02
+      mode: Enabled
+      configuration: null
+      definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::optional_signal_definition::ADC.AIN.0
+      name: ADC/AIN/0
+      label: AIN/0
+    - identifier: ADC_0:AIN/1
+      pad: PA03
+      mode: Enabled
+      configuration: null
+      definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::optional_signal_definition::ADC.AIN.1
+      name: ADC/AIN/1
+      label: AIN/1
+    - identifier: ADC_0:AIN/2
+      pad: PB08
+      mode: Enabled
+      configuration: null
+      definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::optional_signal_definition::ADC.AIN.2
+      name: ADC/AIN/2
+      label: AIN/2
     variant: null
     clocks:
       domain_group:
@@ -188,19 +209,6 @@ drivers:
     variant: null
     clocks:
       domain_group: null
-  FLASH_0:
-    user_label: FLASH_0
-    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::NVMCTRL::driver_config_definition::Flash::HAL:Driver:FLASH
-    functionality: Flash
-    api: HAL:Driver:FLASH
-    configuration:
-      nvm_arch_cache: false
-      nvm_arch_read_mode: No Miss Penalty
-      nvm_arch_sleepprm: Wake On Access
-    optional_signals: []
-    variant: null
-    clocks:
-      domain_group: null
   PM:
     user_label: PM
     definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::PM::driver_config_definition::PM::HAL:HPL:PM
@@ -226,9 +234,9 @@ drivers:
         configuration: {}
   I2C_0:
     user_label: I2C_0
-    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::SERCOM0::driver_config_definition::I2C.Master.Standard~2FFast-mode::HAL:Driver:I2C.Master.Sync
+    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::SERCOM0::driver_config_definition::I2C.Master.Standard~2FFast-mode::HAL:Driver:I2C.Master.RTOS.Beta
     functionality: I2C
-    api: HAL:Driver:I2C_Master_Sync
+    api: HAL:Driver:I2C_Master_RTOS_Beta
     configuration:
       i2c_master_advanced: false
       i2c_master_arch_dbgstop: Keep running
@@ -266,9 +274,9 @@ drivers:
           slow_gclk_selection: Generic clock generator 3
   SPI_0:
     user_label: SPI_0
-    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::SERCOM1::driver_config_definition::SPI.Master::HAL:Driver:SPI.Master.Sync
+    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::SERCOM1::driver_config_definition::SPI.Master::HAL:Driver:SPI.Master.RTOS
     functionality: SPI
-    api: HAL:Driver:SPI_Master_Sync
+    api: HAL:Driver:SPI_Master_RTOS
     configuration:
       spi_master_advanced: false
       spi_master_arch_cpha: Sample input on leading edge
@@ -310,9 +318,9 @@ drivers:
           slow_gclk_selection: Generic clock generator 3
   USART_0:
     user_label: USART_0
-    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::SERCOM2::driver_config_definition::UART::HAL:Driver:USART.Sync
+    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::SERCOM2::driver_config_definition::UART::HAL:Driver:USART.RTOS.Beta
     functionality: USART
-    api: HAL:Driver:USART_Sync
+    api: HAL:Driver:USART_RTOS_Beta
     configuration:
       usart_advanced: false
       usart_arch_clock_mode: USART with internal clock
@@ -370,7 +378,7 @@ drivers:
       domain_group: null
   PWM_0:
     user_label: PWM_0
-    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::TC3::driver_config_definition::PWM::HAL:Driver:PWM
+    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::TC7::driver_config_definition::PWM::HAL:Driver:PWM
     functionality: PWM
     api: HAL:Driver:PWM
     configuration:
@@ -388,7 +396,14 @@ drivers:
       tc_arch_wave_per_val: 1000
       tc_prescaler: Divide by 8
       timer_event_control: false
-    optional_signals: []
+    optional_signals:
+    - identifier: PWM_0:WO/1
+      pad: PB01
+      mode: PWM output
+      configuration: null
+      definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::optional_signal_definition::TC7.WO.1
+      name: TC7/WO/1
+      label: WO/1
     variant: null
     clocks:
       domain_group:
@@ -763,7 +778,7 @@ drivers:
     functionality: WDT
     api: HAL:Driver:WDT
     configuration:
-      wdt_arch_per: 8 clock cycles
+      wdt_arch_per: 16384 clock cycles
       wdt_arch_window: 8 clock cycles
       wdt_arch_window_en: false
     optional_signals: []
@@ -778,6 +793,24 @@ drivers:
         configuration:
           wdt_gclk_selection: Generic clock generator 0
 pads:
+  PA02:
+    name: PA02
+    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::pad::PA02
+    mode: Analog
+    user_label: PA02
+    configuration: null
+  PA03:
+    name: PA03
+    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::pad::PA03
+    mode: Analog
+    user_label: PA03
+    configuration: null
+  PB08:
+    name: PB08
+    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::pad::PB08
+    mode: Analog
+    user_label: PB08
+    configuration: null
   PA08:
     name: PA08
     definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::pad::PA08
@@ -819,5 +852,11 @@ pads:
     definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::pad::PA19
     mode: Digital output
     user_label: PA19
+    configuration: null
+  PB01:
+    name: PB01
+    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::pad::PB01
+    mode: Peripheral IO
+    user_label: PB01
     configuration: null
 toolchain_options: []

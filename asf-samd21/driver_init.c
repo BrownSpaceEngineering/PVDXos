@@ -13,49 +13,58 @@
 #include <hpl_gclk_base.h>
 #include <hpl_pm_base.h>
 
-#include <hpl_adc_base.h>
+/* The channel amount for ADC */
+#define ADC_0_CH_AMOUNT 1
 
-struct spi_m_sync_descriptor SPI_0;
+/* The buffer size for ADC */
+#define ADC_0_BUFFER_SIZE 16
 
-struct adc_sync_descriptor ADC_0;
+/* The maximal channel number of enabled channels */
+#define ADC_0_CH_MAX 0
 
-struct flash_descriptor FLASH_0;
+struct adc_os_descriptor         ADC_0;
+struct adc_os_channel_descriptor ADC_0_ch[ADC_0_CH_AMOUNT];
 
-struct i2c_m_sync_desc I2C_0;
+static uint8_t ADC_0_buffer[ADC_0_BUFFER_SIZE];
+static uint8_t ADC_0_map[ADC_0_CH_MAX + 1];
 
-struct usart_sync_descriptor USART_0;
+struct i2c_m_os_desc I2C_0;
+
+struct spi_m_os_descriptor SPI_0;
+
+struct usart_os_descriptor USART_0;
+uint8_t                    USART_0_buffer[USART_0_BUFFER_SIZE];
 
 struct pwm_descriptor PWM_0;
 
 struct wdt_descriptor WDT_0;
 
-void ADC_0_PORT_init(void)
-{
-}
-
-void ADC_0_CLOCK_init(void)
+/**
+ * \brief ADC initialization function
+ *
+ * Enables ADC peripheral, clocks and initializes ADC driver
+ */
+static void ADC_0_init(void)
 {
 	_pm_enable_bus_clock(PM_BUS_APBC, ADC);
 	_gclk_enable_channel(ADC_GCLK_ID, CONF_GCLK_ADC_SRC);
-}
+	adc_os_init(&ADC_0, ADC, ADC_0_map, ADC_0_CH_MAX, ADC_0_CH_AMOUNT, &ADC_0_ch[0]);
+	adc_os_register_channel_buffer(&ADC_0, 0, ADC_0_buffer, ADC_0_BUFFER_SIZE);
 
-void ADC_0_init(void)
-{
-	ADC_0_CLOCK_init();
-	ADC_0_PORT_init();
-	adc_sync_init(&ADC_0, ADC, (void *)NULL);
-}
+	// Disable digital pin circuitry
+	gpio_set_pin_direction(PA02, GPIO_DIRECTION_OFF);
 
-void FLASH_0_CLOCK_init(void)
-{
+	gpio_set_pin_function(PA02, PINMUX_PA02B_ADC_AIN0);
 
-	_pm_enable_bus_clock(PM_BUS_APBB, NVMCTRL);
-}
+	// Disable digital pin circuitry
+	gpio_set_pin_direction(PA03, GPIO_DIRECTION_OFF);
 
-void FLASH_0_init(void)
-{
-	FLASH_0_CLOCK_init();
-	flash_init(&FLASH_0, NVMCTRL);
+	gpio_set_pin_function(PA03, PINMUX_PA03B_ADC_AIN1);
+
+	// Disable digital pin circuitry
+	gpio_set_pin_direction(PB08, GPIO_DIRECTION_OFF);
+
+	gpio_set_pin_function(PB08, PINMUX_PB08B_ADC_AIN2);
 }
 
 void I2C_0_PORT_init(void)
@@ -92,7 +101,8 @@ void I2C_0_CLOCK_init(void)
 void I2C_0_init(void)
 {
 	I2C_0_CLOCK_init();
-	i2c_m_sync_init(&I2C_0, SERCOM0);
+	i2c_m_os_init(&I2C_0, SERCOM0);
+	i2c_m_os_enable(&I2C_0);
 	I2C_0_PORT_init();
 }
 
@@ -146,7 +156,8 @@ void SPI_0_CLOCK_init(void)
 void SPI_0_init(void)
 {
 	SPI_0_CLOCK_init();
-	spi_m_sync_init(&SPI_0, SERCOM1);
+	spi_m_os_init(&SPI_0, SERCOM1);
+	spi_m_os_enable(&SPI_0);
 	SPI_0_PORT_init();
 }
 
@@ -166,8 +177,10 @@ void USART_0_CLOCK_init(void)
 
 void USART_0_init(void)
 {
+
 	USART_0_CLOCK_init();
-	usart_sync_init(&USART_0, SERCOM2, (void *)NULL);
+	usart_os_init(&USART_0, SERCOM2, USART_0_buffer, USART_0_BUFFER_SIZE, (void *)NULL);
+	usart_os_enable(&USART_0);
 	USART_0_PORT_init();
 }
 
@@ -178,19 +191,21 @@ void delay_driver_init(void)
 
 void PWM_0_PORT_init(void)
 {
+
+	gpio_set_pin_function(PB01, PINMUX_PB01E_TC7_WO1);
 }
 
 void PWM_0_CLOCK_init(void)
 {
-	_pm_enable_bus_clock(PM_BUS_APBC, TC3);
-	_gclk_enable_channel(TC3_GCLK_ID, CONF_GCLK_TC3_SRC);
+	_pm_enable_bus_clock(PM_BUS_APBC, TC7);
+	_gclk_enable_channel(TC7_GCLK_ID, CONF_GCLK_TC7_SRC);
 }
 
 void PWM_0_init(void)
 {
 	PWM_0_CLOCK_init();
 	PWM_0_PORT_init();
-	pwm_init(&PWM_0, TC3, _tc_get_pwm());
+	pwm_init(&PWM_0, TC7, _tc_get_pwm());
 }
 
 void WDT_0_CLOCK_init(void)
@@ -210,8 +225,6 @@ void system_init(void)
 	init_mcu();
 
 	ADC_0_init();
-
-	FLASH_0_init();
 
 	I2C_0_init();
 

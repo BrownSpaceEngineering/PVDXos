@@ -37,7 +37,6 @@ samd21a/gcc/gcc \
 hpl/wdt \
 thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source \
 thirdparty/RTOS/freertos/FreeRTOSV10.0.0 \
-hpl/nvmctrl \
 hpl/core
 
 # Add these based on DIR_INCLUDES in $(ASF_DIR)/gcc/Makefile,
@@ -57,7 +56,6 @@ hpl/adc \
 hpl/core \
 hpl/dmac \
 hpl/gclk \
-hpl/nvmctrl \
 hpl/pm \
 hpl/port \
 hpl/sercom \
@@ -138,7 +136,7 @@ $(ALL_DIRS):
 
 # Linker target
 $(OUTPUT_FILE_PATH): $(OBJS)
-	@echo Linking target: $@
+	@echo ======== Linking target: $@ ========
 	@mkdir -p $(dir $@)
 	$(GCC) -o $(OUTPUT_FILES_PREFIX).elf $(OBJS_AS_ARGS) \
 		-Wl,--start-group -lm -Wl,--end-group -mthumb \
@@ -156,14 +154,16 @@ $(OUTPUT_FILE_PATH): $(OBJS)
         "$(OUTPUT_FILES_PREFIX).eep" || exit 0
 	"arm-none-eabi-objdump" -h -S "$(OUTPUT_FILES_PREFIX).elf" > "$(OUTPUT_FILES_PREFIX).lss"
 	"arm-none-eabi-size" "$(OUTPUT_FILES_PREFIX).elf"
+	@echo ======== Finished linking ========
 
 # Compiler target
 $(OBJ_DIR)/%.o: %.[csS]
-	@echo Building file: $<
+	@echo ======== Building file: $< ========
 	@mkdir -p $(dir $@)
 	$(GCC) $(GCC_ARGS) $(INCLUDE_DIRS_AS_FLAGS) \
 		-MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -o "$@" "$<"
-	@echo Finished building: $<
+	@echo ======== Finished building ========
+	@echo ""
 
 # Detect changes in the dependent files and recompile the respective object files.
 ifneq ($(MAKECMDGOALS),clean)
