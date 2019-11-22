@@ -42,7 +42,7 @@ hpl/core
 # Add these based on DIR_INCLUDES in $(ASF_DIR)/gcc/Makefile,
 # by copying the lines after that variable here and performing the following:
 # 1) Replace '-I"../' with '' (nothing)
-# 2) Replace the trailing '"' characters by replacing '" \' with ' \'. 
+# 2) Replace the trailing '"' characters by replacing '" \' with ' \'.
 # 3) Make sure to include ./ by adding './ \'
 # Alternatively, derive this based on ATMEL_SRC_DIRS above
 # if DIR_INCLUDES doesn't exist
@@ -119,7 +119,7 @@ OUTPUT_FILE_PATH_AS_ARGS += $(OUTPUT_FILE_PATH)
 ################################################################################
 GCC := "arm-none-eabi-gcc"
 GCC_ARGS += -D$(DEVICE_FLAG) -mcpu=$(MCPU)
-LINKER_ARGS += 
+LINKER_ARGS +=
 
 ifdef SystemRoot
 	SHELL = cmd.exe
@@ -137,7 +137,7 @@ $(ALL_DIRS):
 # Linker target
 $(OUTPUT_FILE_PATH): $(OBJS)
 	@echo ======== Linking target: $@ ========
-	@mkdir -p $(dir $@)
+	$(shell  $(MK_DIR) "$(dir $@)")
 	$(GCC) -o $(OUTPUT_FILES_PREFIX).elf $(OBJS_AS_ARGS) \
 		-Wl,--start-group -lm -Wl,--end-group -mthumb \
 		-Wl,-Map="$(OUTPUT_FILES_PREFIX).map" --specs=nano.specs -Wl,--gc-sections -mcpu=$(MCPU) \
@@ -159,7 +159,7 @@ $(OUTPUT_FILE_PATH): $(OBJS)
 # Compiler target
 $(OBJ_DIR)/%.o: %.[csS]
 	@echo ======== Building file: $< ========
-	@mkdir -p $(dir $@)
+	$(shell  $(MK_DIR) "$(dir $@)")
 	$(GCC) $(GCC_ARGS) $(INCLUDE_DIRS_AS_FLAGS) \
 		-MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -o "$@" "$<"
 	@echo ======== Finished building ========
