@@ -6,10 +6,11 @@
 
 # List the subdirectories for project source and header files
 PROJ_SRC_DIRS := \
-src
+src \
+src/processor_drivers \
+src/sensor_drivers
 
-PROJ_INCLUDE_DIRS := \
-src
+PROJ_INCLUDE_DIRS := $PROJ_SRC_DIRS
 
 # Specify the dir for the ASF library
 ASF_DIR := asf-samd21
