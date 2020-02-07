@@ -8,8 +8,7 @@
 PROJ_SRC_DIRS := \
 src
 
-PROJ_INCLUDE_DIRS := \
-src
+PROJ_INCLUDE_DIRS := $(PROJ_SRC_DIRS)
 
 # Specify the dir for the ASF library
 ASF_DIR := asf-samd21
@@ -137,7 +136,7 @@ $(ALL_DIRS):
 # Linker target
 $(OUTPUT_FILE_PATH): $(OBJS)
 	@echo ======== Linking target: $@ ========
-	@mkdir -p $(dir $@)
+	$(shell  $(MK_DIR) "$(dir $@)")
 	$(GCC) -o $(OUTPUT_FILES_PREFIX).elf $(OBJS_AS_ARGS) \
 		-Wl,--start-group -lm -Wl,--end-group -mthumb \
 		-Wl,-Map="$(OUTPUT_FILES_PREFIX).map" --specs=nano.specs -Wl,--gc-sections -mcpu=$(MCPU) \
@@ -159,7 +158,7 @@ $(OUTPUT_FILE_PATH): $(OBJS)
 # Compiler target
 $(OBJ_DIR)/%.o: %.[csS]
 	@echo ======== Building file: $< ========
-	@mkdir -p $(dir $@)
+	$(shell  $(MK_DIR) "$(dir $@)")
 	$(GCC) $(GCC_ARGS) $(INCLUDE_DIRS_AS_FLAGS) \
 		-MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -o "$@" "$<"
 	@echo ======== Finished building ========
