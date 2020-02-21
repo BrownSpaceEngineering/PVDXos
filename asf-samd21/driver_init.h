@@ -23,9 +23,9 @@ extern "C" {
 
 #include <hal_adc_os.h>
 
-#include <hal_i2c_m_os.h>
-
 #include <hal_spi_m_os.h>
+
+#include <hal_i2c_m_os.h>
 
 #include <hal_usart_os.h>
 
@@ -39,9 +39,9 @@ extern "C" {
 
 extern struct adc_os_descriptor ADC_0;
 
-extern struct i2c_m_os_desc I2C_0;
-
 extern struct spi_m_os_descriptor SPI_0;
+
+extern struct i2c_m_os_desc I2C_0;
 
 extern struct usart_os_descriptor USART_0;
 extern uint8_t                    USART_0_buffer[];
@@ -50,13 +50,13 @@ extern struct pwm_descriptor PWM_0;
 
 extern struct wdt_descriptor WDT_0;
 
-void I2C_0_PORT_init(void);
-void I2C_0_CLOCK_init(void);
-void I2C_0_init(void);
-
 void SPI_0_PORT_init(void);
 void SPI_0_CLOCK_init(void);
 void SPI_0_init(void);
+
+void I2C_0_PORT_init(void);
+void I2C_0_CLOCK_init(void);
+void I2C_0_init(void);
 
 void USART_0_PORT_init(void);
 void USART_0_CLOCK_init(void);

@@ -43,6 +43,27 @@ void ADC_0_example_read_task(void *p)
 }
 
 /**
+ * Example task of using SPI_0 to echo using the IO abstraction.
+ */
+void SPI_0_example_task(void *p)
+{
+	struct io_descriptor *io;
+	uint16_t              data;
+
+	(void)p;
+
+	spi_m_os_get_io_descriptor(&SPI_0, &io);
+
+	for (;;) {
+		if (io->read(io, (uint8_t *)&data, 2) == 2) {
+			/* read OK, handle data. */;
+		} else {
+			/* error. */;
+		}
+	}
+}
+
+/**
  * Example task of using I2C_0 to echo using the IO abstraction.
  * Assume the I2C device is AT30TSE temp sensor on IO1 Xplained Pro connected to
  * XPlained board EXT1.
@@ -67,27 +88,6 @@ void I2C_0_example_task(void *p)
 	/* Set to temperature register. */
 	buf[0] = 0;
 	io_write(&I2C_0.io, buf, 1);
-
-	for (;;) {
-		if (io->read(io, (uint8_t *)&data, 2) == 2) {
-			/* read OK, handle data. */;
-		} else {
-			/* error. */;
-		}
-	}
-}
-
-/**
- * Example task of using SPI_0 to echo using the IO abstraction.
- */
-void SPI_0_example_task(void *p)
-{
-	struct io_descriptor *io;
-	uint16_t              data;
-
-	(void)p;
-
-	spi_m_os_get_io_descriptor(&SPI_0, &io);
 
 	for (;;) {
 		if (io->read(io, (uint8_t *)&data, 2) == 2) {

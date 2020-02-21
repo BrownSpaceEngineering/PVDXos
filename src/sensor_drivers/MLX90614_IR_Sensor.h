@@ -43,7 +43,7 @@ uint16_t MLX90614_getAddress(uint16_t addr, uint8_t* rs);
 
 uint16_t MLX90614_setSleepMode(uint16_t addr);
 
-void irPower(bool trueIsOn);
-bool isIROn(void);
+//void irPower(bool trueIsOn);
+//bool isIROn(void);
 
 #endif

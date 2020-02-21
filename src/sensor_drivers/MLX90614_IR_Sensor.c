@@ -22,9 +22,7 @@ void MLX90614_init() {
 
 // reads a 2 byte value which is sorted:
 uint16_t MLX90614_read2ByteValue(uint16_t addr, uint16_t mem_addr, uint8_t* buf) {
-	uint8_t read_buffer[2] = {
-		0x0, 0x0
-	};
+	uint8_t read_buffer[2] = {0x0, 0x0};
 	uint16_t sc = readFromAddressAndMemoryLocation(read_buffer,2,addr,mem_addr,1);
 	*buf = read_buffer[0] | (((uint16_t)read_buffer[1]) << 8); // assumes LSB is in read_buffer[0]
 	return sc;

@@ -16,7 +16,7 @@ void i2c_init() {
 	}
 	// copied from asf-samd21>examples>driver_examples.c
 
-	i2c_m_os_get_io(&I2C_0, &IO);
+	i2c_m_os_get_io(&I2C_0, &io_x);
 	// TODO: figure out what the correct slave address is (and the length)
 	// int16_t slave_addr = 0; int32_t len = 0;
 	// // doesn't really matter because changes when read or write is called
@@ -50,7 +50,7 @@ int32_t i2c_read_command_unsafe(uint8_t *buffer, uint16_t len) {
 	// NOTE: I am not sure what the correct first argument is for this
 	// ALSO: This should not be considered a "function definition" it is declared
 	// 		in the hal_i2c_m_os.h file
-	return io_read(IO, buffer, len);
+	return io_read(&I2C_0.io, buffer, len);
 	//TODO error check (not sure if that should be here or in the driver)
 
 }
@@ -67,7 +67,13 @@ int32_t i2c_write_command_unsafe(uint8_t *buffer, uint16_t len) {
 
 	//use debug port
 	// use the io_read and io_write()
-	return io_write(IO, buffer, len);
+
+
+
+	// struct io_descriptor *io;
+	// i2c_m_os_get_io(&I2C_0, &io);
+
+	return io_write(&I2C_0.io, buffer, len);
 	//TODO error check (not sure if that should be here or in the driver)
 }
 
@@ -76,7 +82,9 @@ int32_t i2c_write_command_unsafe(uint8_t *buffer, uint16_t len) {
  */
 int32_t i2c_set_slave_address_unsafe(int16_t address) {
 
-	return i2c_m_os_set_slaveaddr(&I2C_0, address, I2C_M_SEVEN);
+	// return i2c_m_os_set_slaveaddr(&I2C_0, address, I2C_M_SEVEN);
+	return i2c_m_os_set_slaveaddr(&I2C_0, address, 0);
+
 }
 
 /*
@@ -170,15 +178,16 @@ int32_t writeDataToAddressSub(uint8_t* data, uint16_t len, uint16_t address, uin
 int32_t readFromAddressAndMemoryLocation(uint8_t* buffer, uint16_t len, uint16_t address, uint16_t memoryLocation, bool should_stop){
 	uint8_t data[] = {memoryLocation};
 
-	xSemaphoreTake(i2c_mutex, portMAX_DELAY);
+	//TODO: FIx mutex stuff
+	//xSemaphoreTake(i2c_mutex, portMAX_DELAY);
 	// put the data at the address
-	int32_t err = writeDataToAddress(data, 1, address, should_stop);
+	int32_t err = writeDataToAddressUnsafe(data, 1, address, should_stop);
 	// checks if a non-zero value was returned
-	if (err) {
-		xSemaphoreGive(i2c_mutex);
+	if (err < 0) {
+		//xSemaphoreGive(i2c_mutex);
 		return err;
 	}
 	err = readFromAddress(buffer, len, address, 1);
-	xSemaphoreGive(i2c_mutex);
+	//xSemaphoreGive(i2c_mutex);
 	return err;
 }

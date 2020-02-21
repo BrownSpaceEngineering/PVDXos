@@ -14,9 +14,9 @@ extern "C" {
 
 void ADC_0_example(void);
 
-void I2C_0_example_task(void *p);
-
 void SPI_0_example_task(void *p);
+
+void I2C_0_example_task(void *p);
 
 void USART_0_example_task(void *p);
 

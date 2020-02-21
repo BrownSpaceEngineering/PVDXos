@@ -29,14 +29,14 @@ SUB_DIRS +=  \
  \
 hpl/adc \
 hpl/tc \
+samd21a/armcc/Device/SAMD21A/Source/ARM \
 hpl/systick \
 hpl/dmac \
-samd21a/armcc/Device/SAMD21/Source \
 hal/src \
 thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/MemMang \
 thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/RVDS/ARM_CM0 \
 hpl/pm \
-samd21a/armcc/Device/SAMD21/Source/ARM \
+samd21a/armcc/Device/SAMD21A/Source \
 hpl/sysctrl \
 hal/utils/src \
 hpl/sercom \
@@ -62,7 +62,7 @@ thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/queue.o \
 hal/src/hal_pwm.o \
 thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/timers.o \
 hal/src/hal_delay.o \
-samd21a/armcc/Device/SAMD21/Source/system_samd21.o \
+samd21a/armcc/Device/SAMD21A/Source/system_samd21.o \
 hpl/pm/hpl_pm.o \
 hpl/core/hpl_init.o \
 hpl/gclk/hpl_gclk.o \
@@ -75,12 +75,12 @@ hpl/sysctrl/hpl_sysctrl.o \
 hal/src/hal_spi_m_os.o \
 hal/src/hal_init.o \
 thirdparty/RTOS/freertos/FreeRTOSV10.0.0/rtos_port.o \
-samd21a/armcc/Device/SAMD21/Source/ARM/startup_SAMD21.o \
 rtos_start.o \
 hal/utils/src/utils_list.o \
 examples/driver_examples.o \
 driver_init.o \
 thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/RVDS/ARM_CM0/port.o \
+samd21a/armcc/Device/SAMD21A/Source/ARM/startup_SAMD21.o \
 hpl/sercom/hpl_sercom.o \
 hal/utils/src/utils_ringbuffer.o \
 main.o \
@@ -108,7 +108,7 @@ OBJS_AS_ARGS +=  \
 "hal/src/hal_pwm.o" \
 "thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/timers.o" \
 "hal/src/hal_delay.o" \
-"samd21a/armcc/Device/SAMD21/Source/system_samd21.o" \
+"samd21a/armcc/Device/SAMD21A/Source/system_samd21.o" \
 "hpl/pm/hpl_pm.o" \
 "hpl/core/hpl_init.o" \
 "hpl/gclk/hpl_gclk.o" \
@@ -121,12 +121,12 @@ OBJS_AS_ARGS +=  \
 "hal/src/hal_spi_m_os.o" \
 "hal/src/hal_init.o" \
 "thirdparty/RTOS/freertos/FreeRTOSV10.0.0/rtos_port.o" \
-"samd21a/armcc/Device/SAMD21/Source/ARM/startup_SAMD21.o" \
 "rtos_start.o" \
 "hal/utils/src/utils_list.o" \
 "examples/driver_examples.o" \
 "driver_init.o" \
 "thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/RVDS/ARM_CM0/port.o" \
+"samd21a/armcc/Device/SAMD21A/Source/ARM/startup_SAMD21.o" \
 "hpl/sercom/hpl_sercom.o" \
 "hal/utils/src/utils_ringbuffer.o" \
 "main.o" \
@@ -154,7 +154,7 @@ DEPS_AS_ARGS +=  \
 "main.d" \
 "thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/timers.d" \
 "hal/utils/src/utils_event.d" \
-"samd21a/armcc/Device/SAMD21/Source/system_samd21.d" \
+"samd21a/armcc/Device/SAMD21A/Source/system_samd21.d" \
 "hal/src/hal_pwm.d" \
 "hal/src/hal_usart_os.d" \
 "hpl/core/hpl_core_m0plus_base.d" \
@@ -166,7 +166,6 @@ DEPS_AS_ARGS +=  \
 "hpl/core/hpl_init.d" \
 "hpl/sysctrl/hpl_sysctrl.d" \
 "hal/src/hal_spi_m_os.d" \
-"samd21a/armcc/Device/SAMD21/Source/ARM/startup_SAMD21.d" \
 "thirdparty/RTOS/freertos/FreeRTOSV10.0.0/rtos_port.d" \
 "hal/src/hal_init.d" \
 "driver_init.d" \
@@ -181,6 +180,7 @@ DEPS_AS_ARGS +=  \
 "hal/src/hal_sleep.d" \
 "hal/utils/src/utils_ringbuffer.d" \
 "hpl/sercom/hpl_sercom.d" \
+"samd21a/armcc/Device/SAMD21A/Source/ARM/startup_SAMD21.d" \
 "hal/src/hal_gpio.d" \
 "hal/src/hal_atomic.d" \
 "hpl/tc/hpl_tc.d" \
