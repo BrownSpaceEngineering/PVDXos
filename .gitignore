@@ -1,8 +1,10 @@
 # Repo-specific ignores
 build/
 obj/
-.vscode
 asf-samd21/main.c
+
+# .vscode ignores
+.vscode/.cortex-debug.*
 
 # Prerequisites
 *.d
