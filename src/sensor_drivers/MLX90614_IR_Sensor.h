@@ -32,16 +32,16 @@ typedef enum {AMBIENT = MLX90614_TA,
               OBJ2 = MLX90614_TOBJ2} IRTempTarget;
 
 void MLX90614_init(void);
-uint16_t MLX90614_read_all_obj(uint16_t addr, uint8_t* buf);
-uint16_t MLX90614_read_amb(uint16_t addr, uint8_t* buf);
-uint16_t MLX90614_read2ByteValue(uint16_t addr, uint16_t mem_addr, uint8_t* buf);
-uint16_t MLX90614_readRawIRData(uint16_t addr, IRChannel chan, uint8_t* buf);
+uint16_t MLX90614_read_all_obj(uint8_t addr, uint8_t* buf);
+uint16_t MLX90614_read_amb(uint8_t addr, uint8_t* buf);
+uint16_t MLX90614_read2ByteValue(uint8_t addr, uint8_t mem_addr, uint8_t* buf);
+uint16_t MLX90614_readRawIRData(uint8_t addr, IRChannel chan, uint8_t* buf);
 float dataToTemp(uint16_t data);
-uint16_t MLX90614_readTempC(uint16_t addr, IRTempTarget temp_target, float* buf);
+uint16_t MLX90614_readTempC(uint8_t addr, IRTempTarget temp_target, float* buf);
 
-uint16_t MLX90614_getAddress(uint16_t addr, uint8_t* rs);
+uint16_t MLX90614_getAddress(uint8_t addr, uint8_t* rs);
 
-uint16_t MLX90614_setSleepMode(uint16_t addr);
+uint16_t MLX90614_setSleepMode(uint8_t addr);
 
 //void irPower(bool trueIsOn);
 //bool isIROn(void);
