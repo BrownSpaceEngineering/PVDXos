@@ -2,12 +2,17 @@ format_version: '2'
 name: PVDXos
 versions:
   api: '1.0'
-  backend: 1.6.148
-  commit: 605f106ab95776472e3febf2fac2471441fb1816
-  content: 1.0.1635
-  content_pack_name: acme-packs-all
+  backend: 1.9.696
+  commit: ''
+  content: unknown
+  content_pack_name: unknown
   format: '2'
-  frontend: 1.6.1884
+  frontend: 1.9.696
+  packs_version_avr8: 1.0.1463
+  packs_version_qtouch: unknown
+  packs_version_sam: 1.0.1726
+  version_backend: 1.9.696
+  version_frontend: ''
 board:
   identifier: CustomBoard
   device: SAMD21J18A-AF
@@ -133,14 +138,34 @@ drivers:
     functionality: System
     api: HAL:HPL:GCLK
     configuration:
+      $input: 400000
+      $input_id: External Crystal Oscillator 0.4-32MHz (XOSC)
+      RESERVED_InputFreq: 400000
+      RESERVED_InputFreq_id: External Crystal Oscillator 0.4-32MHz (XOSC)
+      _$freq_output_Generic clock generator 0: 1000000
+      _$freq_output_Generic clock generator 1: 400000
+      _$freq_output_Generic clock generator 2: 400000
+      _$freq_output_Generic clock generator 3: 400000
+      _$freq_output_Generic clock generator 4: 400000
+      _$freq_output_Generic clock generator 5: 400000
+      _$freq_output_Generic clock generator 6: 400000
+      _$freq_output_Generic clock generator 7: 400000
       enable_gclk_gen_0: true
+      enable_gclk_gen_0__externalclock: 1000000
       enable_gclk_gen_1: false
+      enable_gclk_gen_1__externalclock: 1000000
       enable_gclk_gen_2: false
+      enable_gclk_gen_2__externalclock: 1000000
       enable_gclk_gen_3: false
+      enable_gclk_gen_3__externalclock: 1000000
       enable_gclk_gen_4: false
+      enable_gclk_gen_4__externalclock: 1000000
       enable_gclk_gen_5: false
+      enable_gclk_gen_5__externalclock: 1000000
       enable_gclk_gen_6: false
+      enable_gclk_gen_6__externalclock: 1000000
       enable_gclk_gen_7: false
+      enable_gclk_gen_7__externalclock: 1000000
       gclk_arch_gen_0_RUNSTDBY: false
       gclk_arch_gen_0_enable: true
       gclk_arch_gen_0_idc: false
@@ -215,6 +240,11 @@ drivers:
     functionality: System
     api: HAL:HPL:PM
     configuration:
+      $input: 1000000
+      $input_id: Generic clock generator 0
+      RESERVED_InputFreq: 1000000
+      RESERVED_InputFreq_id: Generic clock generator 0
+      _$freq_output_CPU: 1000000
       apba_div: '1'
       apbb_div: '1'
       apbc_div: '1'
@@ -318,7 +348,7 @@ drivers:
           slow_gclk_selection: Generic clock generator 3
   USART_0:
     user_label: USART_0
-    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::SERCOM2::driver_config_definition::UART::HAL:Driver:USART.RTOS.Beta
+    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::SERCOM3::driver_config_definition::UART::HAL:Driver:USART.RTOS.Beta
     functionality: USART
     api: HAL:Driver:USART_RTOS_Beta
     configuration:
@@ -345,11 +375,11 @@ drivers:
     variant:
       specification: TXPO=0, RXPO=1, CMODE=0
       required_signals:
-      - name: SERCOM2/PAD/0
-        pad: PA12
+      - name: SERCOM3/PAD/0
+        pad: PA22
         label: TX
-      - name: SERCOM2/PAD/1
-        pad: PA13
+      - name: SERCOM3/PAD/1
+        pad: PA23
         label: RX
     clocks:
       domain_group:
@@ -700,6 +730,14 @@ drivers:
     functionality: System
     api: HAL:HPL:SYSCTRL
     configuration:
+      $input: 400000
+      $input_id: Generic clock generator 3
+      RESERVED_InputFreq: 400000
+      RESERVED_InputFreq_id: Generic clock generator 3
+      _$freq_output_8MHz Internal Oscillator (OSC8M): 1000000
+      _$freq_output_Digital Frequency Locked Loop (DFLL48M): 48000000
+      _$freq_output_External Crystal Oscillator 0.4-32MHz (XOSC): 400000
+      _$freq_output_Fractional Digital Phase Locked Loop (FDPLL96M): 585925000
       dfll48m_arch_bplckc: false
       dfll48m_arch_calibration: false
       dfll48m_arch_ccdis: false
@@ -823,18 +861,6 @@ pads:
     mode: I2C
     user_label: PA09
     configuration: null
-  PA12:
-    name: PA12
-    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::pad::PA12
-    mode: Peripheral IO
-    user_label: PA12
-    configuration: null
-  PA13:
-    name: PA13
-    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::pad::PA13
-    mode: Peripheral IO
-    user_label: PA13
-    configuration: null
   PA16:
     name: PA16
     definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::pad::PA16
@@ -853,6 +879,18 @@ pads:
     mode: Digital output
     user_label: PA19
     configuration: null
+  PA22:
+    name: PA22
+    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::pad::PA22
+    mode: Peripheral IO
+    user_label: PA22
+    configuration: null
+  PA23:
+    name: PA23
+    definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::pad::PA23
+    mode: Peripheral IO
+    user_label: PA23
+    configuration: null
   PB01:
     name: PB01
     definition: Atmel:SAMD21_Drivers:0.0.1::SAMD21J18A-AF::pad::PB01
@@ -860,3 +898,4 @@ pads:
     user_label: PB01
     configuration: null
 toolchain_options: []
+static_files: []

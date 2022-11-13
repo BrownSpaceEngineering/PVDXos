@@ -11,6 +11,10 @@
 void assert_triggered(const char *file, uint32_t line);
 #endif
 
+#if defined(__ICCARM__)
+#include <cmsis_compiler.h>
+#endif
+
 #include <peripheral_clk_config.h>
 
 // <h> Basic
@@ -38,6 +42,7 @@ void assert_triggered(const char *file, uint32_t line);
 /* configTOTAL_HEAP_SIZE is not used when heap_3.c is used. */
 // <o> Heap size<64-1048576:4>
 // <i> Defines the heap size(byte) on system
+// <i> value should be multiples of 4
 // <i> Default: 2400
 // <id> freertos_total_heap_size
 #ifndef configTOTAL_HEAP_SIZE

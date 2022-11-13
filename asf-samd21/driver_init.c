@@ -164,22 +164,22 @@ void SPI_0_init(void)
 void USART_0_PORT_init(void)
 {
 
-	gpio_set_pin_function(PA12, PINMUX_PA12C_SERCOM2_PAD0);
+	gpio_set_pin_function(PA22, PINMUX_PA22C_SERCOM3_PAD0);
 
-	gpio_set_pin_function(PA13, PINMUX_PA13C_SERCOM2_PAD1);
+	gpio_set_pin_function(PA23, PINMUX_PA23C_SERCOM3_PAD1);
 }
 
 void USART_0_CLOCK_init(void)
 {
-	_pm_enable_bus_clock(PM_BUS_APBC, SERCOM2);
-	_gclk_enable_channel(SERCOM2_GCLK_ID_CORE, CONF_GCLK_SERCOM2_CORE_SRC);
+	_pm_enable_bus_clock(PM_BUS_APBC, SERCOM3);
+	_gclk_enable_channel(SERCOM3_GCLK_ID_CORE, CONF_GCLK_SERCOM3_CORE_SRC);
 }
 
 void USART_0_init(void)
 {
 
 	USART_0_CLOCK_init();
-	usart_os_init(&USART_0, SERCOM2, USART_0_buffer, USART_0_BUFFER_SIZE, (void *)NULL);
+	usart_os_init(&USART_0, SERCOM3, USART_0_buffer, USART_0_BUFFER_SIZE, (void *)NULL);
 	usart_os_enable(&USART_0);
 	USART_0_PORT_init();
 }

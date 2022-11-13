@@ -160,7 +160,7 @@ static struct _i2c_m_async_device *_sercom0_dev = NULL;
 
 static struct _spi_async_dev *_sercom1_dev = NULL;
 
-static struct _usart_async_device *_sercom2_dev = NULL;
+static struct _usart_async_device *_sercom3_dev = NULL;
 
 static uint8_t _get_sercom_index(const void *const hw);
 static uint8_t _sercom_get_irq_num(const void *const hw);
@@ -625,8 +625,8 @@ static void _sercom_init_irq_param(const void *const hw, void *dev)
 		_sercom1_dev = (struct _spi_async_dev *)dev;
 	}
 
-	if (hw == SERCOM2) {
-		_sercom2_dev = (struct _usart_async_device *)dev;
+	if (hw == SERCOM3) {
+		_sercom3_dev = (struct _usart_async_device *)dev;
 	}
 }
 
@@ -1110,6 +1110,7 @@ static void _sercom_i2c_m_irq_handler(struct _i2c_m_async_device *i2c_dev)
 		} else {
 			i2c_dev->cb.error(i2c_dev, I2C_ERR_BUS);
 		}
+		hri_sercomi2cm_clear_INTFLAG_reg(hw, SERCOM_I2CM_INTFLAG_ERROR);
 	}
 }
 
@@ -1759,6 +1760,12 @@ static struct i2cs_configuration _i2css[] = {
 #if CONF_SERCOM_5_I2CS_ENABLE == 1
     I2CS_CONFIGURATION(5),
 #endif
+#if CONF_SERCOM_6_I2CS_ENABLE == 1
+    I2CS_CONFIGURATION(6),
+#endif
+#if CONF_SERCOM_7_I2CS_ENABLE == 1
+    I2CS_CONFIGURATION(7),
+#endif
 };
 #endif
 
@@ -1799,6 +1806,10 @@ int32_t _i2c_s_async_init(struct _i2c_s_async_device *const device, void *const 
 	NVIC_DisableIRQ((IRQn_Type)_sercom_get_irq_num(hw));
 	NVIC_ClearPendingIRQ((IRQn_Type)_sercom_get_irq_num(hw));
 	NVIC_EnableIRQ((IRQn_Type)_sercom_get_irq_num(hw));
+
+	// Enable Address Match and PREC interrupt by default.
+	hri_sercomi2cs_set_INTEN_AMATCH_bit(hw);
+	hri_sercomi2cs_set_INTEN_PREC_bit(hw);
 
 	return ERR_NONE;
 }
@@ -2453,9 +2464,9 @@ void SERCOM1_Handler(void)
 	_spi_handler(_sercom1_dev);
 }
 
-void SERCOM2_Handler(void)
+void SERCOM3_Handler(void)
 {
-	_sercom_usart_interrupt_handler(_sercom2_dev);
+	_sercom_usart_interrupt_handler(_sercom3_dev);
 }
 
 int32_t _spi_m_sync_init(struct _spi_m_sync_dev *dev, void *const hw)
