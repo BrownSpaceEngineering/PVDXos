@@ -1,9 +1,9 @@
 #include <atmel_start.h>
 
-#define TASK_EXAMPLE_STACK_SIZE (128 / sizeof(portSTACK_TYPE))
+#define TASK_EXAMPLE_STACK_SIZE (256 / sizeof(portSTACK_TYPE))
 #define TASK_EXAMPLE_STACK_PRIORITY (tskIDLE_PRIORITY + 1)
-static TaskHandle_t      xCreatedOnTask;
-static TaskHandle_t      xCreatedOffTask;
+static TaskHandle_t      xCreatedLightTask;
+static TaskHandle_t      xCreatedUSARTTask;
 static SemaphoreHandle_t disp_mutex;
 
 struct io_descriptor *io;
@@ -85,20 +85,20 @@ int main(void)
     // TODO: why does setting the baud rate break things?
 //    usart_sync_set_baud_rate(&USART_0, 9600);
 
-    usart_sync_set_parity(&USART_0, USART_PARITY_NONE);
-    usart_sync_set_character_size(&USART_0, USART_CHARACTER_SIZE_8BITS);
-    usart_sync_set_stopbits(&USART_0, USART_STOP_BITS_ONE);
-    usart_sync_get_io_descriptor(&USART_0, &io);
-    usart_sync_enable(&USART_0);
+//    usart_sync_set_parity(&USART_0, USART_PARITY_NONE);
+//    usart_sync_set_character_size(&USART_0, USART_CHARACTER_SIZE_8BITS);
+//    usart_sync_set_stopbits(&USART_0, USART_STOP_BITS_ONE);
+//    usart_sync_get_io_descriptor(&USART_0, &io);
+//    usart_sync_enable(&USART_0);
 
 //    usart_os_set_mode(&USART_0, USART_MODE_ASYNCHRONOUS);
 
-//    usart_os_set_parity(&USART_0, USART_PARITY_NONE);
-//    usart_os_set_baud_rate(&USART_0, 9600);
-//    usart_os_set_data_order(&USART_0, USART_DATA_ORDER_LSB);
-//    usart_os_set_character_size(&USART_0, USART_CHARACTER_SIZE_8BITS);
-//    usart_os_set_stopbits(&USART_0, USART_STOP_BITS_ONE);
-//    usart_os_get_io(&USART_0, &io);
+    usart_os_set_parity(&USART_0, USART_PARITY_NONE);
+    usart_os_set_baud_rate(&USART_0, -9600);
+    usart_os_set_data_order(&USART_0, USART_DATA_ORDER_LSB);
+    usart_os_set_character_size(&USART_0, USART_CHARACTER_SIZE_8BITS);
+    usart_os_set_stopbits(&USART_0, USART_STOP_BITS_ONE);
+    usart_os_get_io(&USART_0, &io);
 
 //    usart_sync_get_io_descriptor(&USART_0, &io);
 //    usart_sync_enable(&USART_0);
@@ -113,7 +113,7 @@ int main(void)
 
 
     if (xTaskCreate(
-            light_task, "Light", TASK_EXAMPLE_STACK_SIZE, NULL, TASK_EXAMPLE_STACK_PRIORITY, xCreatedOnTask)
+            light_task, "Light", TASK_EXAMPLE_STACK_SIZE, NULL, TASK_EXAMPLE_STACK_PRIORITY, &xCreatedLightTask)
         != pdPASS) {
         // ERROR!
     }
@@ -125,7 +125,7 @@ int main(void)
 //    }
 
     if (xTaskCreate(
-            usart_task2, "USART2", TASK_EXAMPLE_STACK_SIZE, NULL, TASK_EXAMPLE_STACK_PRIORITY, xCreatedOnTask)
+            usart_task2, "USART2", TASK_EXAMPLE_STACK_SIZE, NULL, TASK_EXAMPLE_STACK_PRIORITY, &xCreatedUSARTTask)
         != pdPASS) {
         // ERROR!
     }
