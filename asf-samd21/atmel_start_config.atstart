@@ -2,12 +2,17 @@ format_version: '2'
 name: PVDXos
 versions:
   api: '1.0'
-  backend: 1.6.148
-  commit: 605f106ab95776472e3febf2fac2471441fb1816
-  content: 1.0.1635
-  content_pack_name: acme-packs-all
+  backend: 1.9.698
+  commit: ''
+  content: unknown
+  content_pack_name: unknown
   format: '2'
-  frontend: 1.6.1884
+  frontend: 1.9.698
+  packs_version_avr8: 1.0.1463
+  packs_version_qtouch: unknown
+  packs_version_sam: 1.0.1726
+  version_backend: 1.9.698
+  version_frontend: ''
 board:
   identifier: CustomBoard
   device: SAMD21J18A-AF
@@ -133,21 +138,41 @@ drivers:
     functionality: System
     api: HAL:HPL:GCLK
     configuration:
+      $input: 1000000
+      $input_id: 8MHz Internal Oscillator (OSC8M)
+      RESERVED_InputFreq: 1000000
+      RESERVED_InputFreq_id: 8MHz Internal Oscillator (OSC8M)
+      _$freq_output_Generic clock generator 0: 1000000
+      _$freq_output_Generic clock generator 1: 5000
+      _$freq_output_Generic clock generator 2: 400000
+      _$freq_output_Generic clock generator 3: 400000
+      _$freq_output_Generic clock generator 4: 400000
+      _$freq_output_Generic clock generator 5: 400000
+      _$freq_output_Generic clock generator 6: 400000
+      _$freq_output_Generic clock generator 7: 400000
       enable_gclk_gen_0: true
-      enable_gclk_gen_1: false
+      enable_gclk_gen_0__externalclock: 1000000
+      enable_gclk_gen_1: true
+      enable_gclk_gen_1__externalclock: 1000000
       enable_gclk_gen_2: false
+      enable_gclk_gen_2__externalclock: 1000000
       enable_gclk_gen_3: false
+      enable_gclk_gen_3__externalclock: 1000000
       enable_gclk_gen_4: false
+      enable_gclk_gen_4__externalclock: 1000000
       enable_gclk_gen_5: false
+      enable_gclk_gen_5__externalclock: 1000000
       enable_gclk_gen_6: false
+      enable_gclk_gen_6__externalclock: 1000000
       enable_gclk_gen_7: false
+      enable_gclk_gen_7__externalclock: 1000000
       gclk_arch_gen_0_RUNSTDBY: false
       gclk_arch_gen_0_enable: true
       gclk_arch_gen_0_idc: false
       gclk_arch_gen_0_oe: false
       gclk_arch_gen_0_oov: false
       gclk_arch_gen_1_RUNSTDBY: false
-      gclk_arch_gen_1_enable: false
+      gclk_arch_gen_1_enable: true
       gclk_arch_gen_1_idc: false
       gclk_arch_gen_1_oe: false
       gclk_arch_gen_1_oov: false
@@ -184,9 +209,9 @@ drivers:
       gclk_gen_0_div: 1
       gclk_gen_0_div_sel: false
       gclk_gen_0_oscillator: 8MHz Internal Oscillator (OSC8M)
-      gclk_gen_1_div: 1
+      gclk_gen_1_div: 200
       gclk_gen_1_div_sel: false
-      gclk_gen_1_oscillator: External Crystal Oscillator 0.4-32MHz (XOSC)
+      gclk_gen_1_oscillator: 8MHz Internal Oscillator (OSC8M)
       gclk_gen_2_div: 1
       gclk_gen_2_div_sel: false
       gclk_gen_2_oscillator: External Crystal Oscillator 0.4-32MHz (XOSC)
@@ -215,6 +240,11 @@ drivers:
     functionality: System
     api: HAL:HPL:PM
     configuration:
+      $input: 1000000
+      $input_id: Generic clock generator 0
+      RESERVED_InputFreq: 1000000
+      RESERVED_InputFreq_id: Generic clock generator 0
+      _$freq_output_CPU: 1000000
       apba_div: '1'
       apbb_div: '1'
       apbc_div: '1'
@@ -700,6 +730,14 @@ drivers:
     functionality: System
     api: HAL:HPL:SYSCTRL
     configuration:
+      $input: 400000
+      $input_id: Generic clock generator 3
+      RESERVED_InputFreq: 400000
+      RESERVED_InputFreq_id: Generic clock generator 3
+      _$freq_output_8MHz Internal Oscillator (OSC8M): 1000000
+      _$freq_output_Digital Frequency Locked Loop (DFLL48M): 48000000
+      _$freq_output_External Crystal Oscillator 0.4-32MHz (XOSC): 400000
+      _$freq_output_Fractional Digital Phase Locked Loop (FDPLL96M): 585925000
       dfll48m_arch_bplckc: false
       dfll48m_arch_calibration: false
       dfll48m_arch_ccdis: false
@@ -787,11 +825,11 @@ drivers:
       domain_group:
         nodes:
         - name: WDT
-          input: Generic clock generator 0
+          input: Generic clock generator 1
           external: false
           external_frequency: 0
         configuration:
-          wdt_gclk_selection: Generic clock generator 0
+          wdt_gclk_selection: Generic clock generator 1
 pads:
   PA02:
     name: PA02
@@ -860,3 +898,4 @@ pads:
     user_label: PB01
     configuration: null
 toolchain_options: []
+static_files: []
